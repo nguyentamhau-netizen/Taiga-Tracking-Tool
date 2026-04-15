@@ -56,6 +56,27 @@ The script will:
 - start the app
 - open the browser at `http://127.0.0.1:8000`
 
+## Portable Release
+
+If you want to share a no-code package with the team:
+
+```powershell
+.\build-portable.bat
+```
+
+This creates:
+
+- `release/TaigaTrackingTool-portable.zip`
+
+Team usage:
+
+1. Download the zip
+2. Extract it anywhere
+3. Optionally copy `config.example.json` to `config.local.json` and adjust `qcNames`
+4. Double-click `TaigaTrackingTool.exe`
+
+The portable app opens the browser automatically and keeps its cache/config next to the exe.
+
 ## Development Mode
 
 ```powershell

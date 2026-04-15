@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import secrets
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -20,8 +21,14 @@ class AppConfig:
     snapshot_dir: Path
 
 
+def app_root() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[2]
+
+
 def load_config() -> AppConfig:
-    root = Path(__file__).resolve().parents[2]
+    root = app_root()
     local_path = root / "config.local.json"
     example_path = root / "config.example.json"
     config_path = local_path if local_path.exists() else example_path

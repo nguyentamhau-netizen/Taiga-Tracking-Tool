@@ -8,3 +8,7 @@ backend/.pytest_cache/
 config.local.json
 .cache/
 *.log
+build/
+dist/
+release/
+*.spec
