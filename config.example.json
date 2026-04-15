@@ -1,0 +1,12 @@
+{
+  "taigaBaseUrl": "https://projects.kyanon.digital",
+  "projectSlug": "amaze-all-in-one",
+  "qcNames": [
+    "Bich Dao",
+    "Le Thi Ngoc Huyen"
+  ],
+  "warningDaysBeforeSprintEnd": 3,
+  "warningDaysWithoutUpdate": 5,
+  "autoRefreshMinutes": 10,
+  "cacheTtlSeconds": 300
+}
