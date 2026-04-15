@@ -66,14 +66,14 @@ If you want to share a no-code package with the team:
 
 This creates:
 
-- `release/TaigaTrackingTool-portable.zip`
+- `release/TaigaQCTracker-portable.zip`
 
 Team usage:
 
 1. Download the zip
 2. Extract it anywhere
 3. Optionally copy `config.example.json` to `config.local.json` and adjust `qcNames`
-4. Double-click `TaigaTrackingTool.exe`
+4. Double-click `TaigaQCTracker.exe`
 
 The portable app opens the browser automatically and keeps its cache/config next to the exe.
 

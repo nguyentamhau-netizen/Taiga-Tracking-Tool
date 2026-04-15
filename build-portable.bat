@@ -1,7 +1,7 @@
 @echo off
 setlocal
 set ROOT=%~dp0
-set DIST_NAME=TaigaTrackingTool
+set DIST_NAME=TaigaQCTracker
 set RELEASE_DIR=%ROOT%release
 set PORTABLE_DIR=%RELEASE_DIR%\%DIST_NAME%-portable
 
@@ -18,6 +18,7 @@ pyinstaller ^
   --clean ^
   --windowed ^
   --name "%DIST_NAME%" ^
+  --icon "%ROOT%assets\\taiga-qc-tracker.ico" ^
   --paths "%ROOT%backend" ^
   --add-data "%ROOT%frontend\\dist;frontend\\dist" ^
   --add-data "%ROOT%config.example.json;." ^
