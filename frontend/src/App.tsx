@@ -408,6 +408,7 @@ function ItemTable({
 
 export function App() {
   const [loading, setLoading] = useState(true);
+  const [loginStage, setLoginStage] = useState<"idle" | "authenticating" | "loading_workspace">("idle");
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
@@ -497,12 +498,16 @@ export function App() {
 
   const handleLogin = async () => {
     setLoading(true);
+    setLoginStage("authenticating");
     setError("");
     try {
       await api.login(loginForm.username, loginForm.password);
+      setLoginStage("loading_workspace");
       await loadMetadata();
+      setLoginStage("idle");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
+      setLoginStage("idle");
     } finally {
       setLoading(false);
     }
@@ -567,7 +572,10 @@ export function App() {
           <p>Sign in with your Taiga account.</p>
           <input placeholder="Email or username" value={loginForm.username} onChange={(event) => setLoginForm((current) => ({ ...current, username: event.target.value }))} />
           <input type="password" placeholder="Password" value={loginForm.password} onChange={(event) => setLoginForm((current) => ({ ...current, password: event.target.value }))} />
-          <button onClick={() => void handleLogin()} disabled={loading}>{loading ? "Signing in..." : "Sign in"}</button>
+          <button onClick={() => void handleLogin()} disabled={loading}>
+            {loginStage === "authenticating" ? "Signing in..." : loginStage === "loading_workspace" ? "Loading workspace..." : "Sign in"}
+          </button>
+          {loginStage === "loading_workspace" ? <p>Connected to Taiga. Loading your project data...</p> : null}
           {error ? <pre className="error-box">{error}</pre> : null}
         </section>
       </main>

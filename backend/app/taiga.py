@@ -594,6 +594,28 @@ async def _build_snapshot_bundle(client: TaigaClient, config: AppConfig) -> tupl
     return metadata_payload, serialized_items
 
 
+async def _build_metadata_payload(client: TaigaClient, config: AppConfig) -> dict[str, Any]:
+    project = await client.get_project()
+    project_id = int(project["id"])
+    user_options, _, sprints, _, statuses, _ = await _load_reference_data(client, project_id)
+    qc_users = _filter_qc_users(user_options, config.qc_names)
+    return {
+        "project_name": project["name"],
+        "auto_refresh_minutes": config.auto_refresh_minutes,
+        "qc_names": config.qc_names,
+        "sprints": [s.model_dump(mode="json") for s in sorted(sprints, key=lambda sprint: (sprint.closed, sprint.name.casefold()))],
+        "statuses": {
+            kind: [status.model_dump(mode="json") for status in values]
+            for kind, values in statuses.items()
+        },
+        "users": [user.model_dump(mode="json") for user in qc_users],
+    }
+
+
+async def refresh_metadata_snapshot(client: TaigaClient, config: AppConfig) -> None:
+    _write_snapshot(config, "metadata", await _build_metadata_payload(client, config))
+
+
 async def refresh_snapshots(client: TaigaClient, config: AppConfig) -> None:
     metadata_payload, serialized_items = await _build_snapshot_bundle(client, config)
     _write_snapshot(config, "metadata", metadata_payload)
@@ -604,7 +626,7 @@ async def refresh_snapshots(client: TaigaClient, config: AppConfig) -> None:
 async def build_metadata(client: TaigaClient, config: AppConfig, me: SessionUser) -> MetadataResponse:
     snapshot = _read_snapshot(config, "metadata")
     if snapshot is None or _metadata_snapshot_missing_roles(snapshot):
-        await refresh_snapshots(client, config)
+        await refresh_metadata_snapshot(client, config)
         snapshot = _read_snapshot(config, "metadata") or {}
     snapshot["me"] = me.model_dump(mode="json")
     return MetadataResponse.model_validate(snapshot)
