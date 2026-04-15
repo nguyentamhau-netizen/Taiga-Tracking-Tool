@@ -77,6 +77,13 @@ Team usage:
 
 The portable app opens the browser automatically and keeps its cache/config next to the exe.
 
+If port `8000` is already in use, the app will choose another free local port automatically.
+
+If startup fails, ask users to send:
+
+- `portable-runtime.log`
+- `portable-url.txt`
+
 ## Development Mode
 
 ```powershell
