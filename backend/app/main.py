@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
-from .config import app_root, load_config
+from .config import bundle_root, load_config
 from .schemas import DashboardCounts, ItemUpdateRequest, ItemUpdateResponse, ItemsResponse, LoginRequest, MetadataResponse, SessionUser
 from .taiga import TaigaClient, build_dashboard_counts, build_dashboard_items, build_items, build_metadata, build_tracker_item_from_detail, refresh_snapshots, update_snapshot_item
 
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(SessionMiddleware, secret_key=config.session_secret)
-FRONTEND_DIST = app_root() / "frontend" / "dist"
+FRONTEND_DIST = bundle_root() / "frontend" / "dist"
 
 
 def _session_client(request: Request) -> tuple[TaigaClient, SessionUser]:
